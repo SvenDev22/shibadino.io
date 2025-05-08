@@ -58,7 +58,7 @@ export default function TickerLogos({ className }: { className?: string }) {
       <SimpleMarquee direction="left" baseVelocity={4}>
         <div className="flex w-full items-center justify-center gap-10 pl-10">
           {logos.map((logo, key) => (
-            <Link key={key} href={logo.link}>
+            <Link key={key} href={logo.link} target="_blank">
               <LogoWithUnderline image={logo.src} />
             </Link>
           ))}
