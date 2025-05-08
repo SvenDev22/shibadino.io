@@ -58,7 +58,7 @@ export default function DisclaimerSection() {
         </Link>
       </div>
       <p className="text-sd-green-400 font-heading text-center text-[16px] leading-[120%] tracking-[-0.03em] md:text-[20px] md:leading-[1.3em]">
-        &copy; 2025 ShibaDino. All Rights Reserved. designed by hoffe
+        &copy; 2025 ShibaDino. All Rights Reserved.
       </p>
       <p className="text-sd-green-200 max-w-[600px] text-center text-[10px] leading-[10px]">
         Disclaimer: Cryptocurrency may be unregulated in your jurisdiction. The

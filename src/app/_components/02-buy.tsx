@@ -19,8 +19,9 @@ export default function BuyDino({
   handleInputChange,
   toToken,
   setTokenType,
+  buyHandler,
+  claimHandler,
 }: any) {
-  console.log("toToken", toToken);
   return (
     <div className="bg-sd-green-800 relative flex h-fit w-full max-w-[600px] flex-col items-center justify-center gap-[20px] rounded-[40px] px-5 pt-[32px] pb-[40px] md:px-[32px]">
       <div className="absolute top-0 left-1/2 h-[1px] w-[90%] -translate-x-1/2 -translate-y-1/2 border border-t border-dashed border-[#0B1522]" />
@@ -32,6 +33,8 @@ export default function BuyDino({
         handleInputChange={handleInputChange}
         toToken={toToken}
         setTokenType={setTokenType}
+        buyHandler={buyHandler}
+        claimHandler={claimHandler}
       />
       <CurentPrice />
     </div>
@@ -108,6 +111,8 @@ function Swap({
   toToken,
   userData,
   setTokenType,
+  buyHandler,
+  claimHandler,
 }: any) {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-[10px]">
@@ -128,6 +133,7 @@ function Swap({
             className={`font-heading flex flex-1 cursor-pointer items-center justify-center rounded-[100px] bg-gradient-to-l from-[rgb(159_255_170)] to-[rgb(184_245_191)] p-3 text-[18px] leading-[18px] text-[#052426]`}
             whileHover="hover"
             initial="initial"
+            onClick={buyHandler}
           >
             <motion.span
               variants={{
@@ -148,6 +154,10 @@ function Swap({
             className={`font-heading flex flex-1 cursor-pointer items-center justify-center rounded-[100px] bg-gradient-to-l from-[rgb(159_255_170)] to-[rgb(184_245_191)] p-3 text-[18px] leading-[18px] text-[#052426]`}
             whileHover="hover"
             initial="initial"
+            onClick={claimHandler}
+            disabled={
+              userData?.totalTokens === 0 || Number(presaleData?.vesting) === 0
+            }
           >
             <motion.span
               variants={{

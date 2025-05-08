@@ -4,6 +4,7 @@
 import * as anchor from "@coral-xyz/anchor";
 
 import {
+  Keypair,
   PublicKey,
   SYSVAR_RENT_PUBKEY,
   SystemProgram,
@@ -15,6 +16,8 @@ import {
   sendTransaction,
   usePresaleProgram,
 } from "@/utils/hooks";
+import { formatUnits, parseUnits } from "@ethersproject/units";
+import { mint, usdtMint } from "@/utils/constants";
 import { useCallback, useEffect, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
@@ -29,8 +32,6 @@ import TickerLogos from "../_components/02-ticker-logos";
 import TickerPresale from "../_components/02-ticker-presale";
 import axios from "axios";
 import { cn } from "@/lib/utils";
-import { formatUnits } from "@ethersproject/units";
-import { mint } from "@/utils/constants";
 import { toLocalFormat } from "@/utils/constants";
 
 export default function PresaleSection({ className }: { className?: string }) {
@@ -58,6 +59,7 @@ function Widget() {
   const [toToken, setToToken] = useState<any>();
   const wallet = useWallet();
   const [tokenType, setTokenType] = useState(2);
+  const [totalUSDTValue, setTotalUSDTValue] = useState(0);
   const [alertState, setAlertState] = useState({
     open: false,
     message: "",
@@ -197,13 +199,19 @@ function Widget() {
   };
 
   useEffect(() => {
+    console.log(
+      from,
+      presaleData?.oneSolPrice,
+      presaleData?.oneUsdPrice,
+      tokenType,
+    );
     if (Number(from) > 0 && presaleData?.oneUsdPrice) {
       if (tokenType === 1) {
         setToToken(
           presaleData.oneUsdPrice * presaleData.oneSolPrice * (from ?? 0),
         );
       } else {
-        setToToken((presaleData.oneUsdPrice * Number(from)).toFixed(2));
+        setToToken((presaleData.oneUsdPrice * Number(from)).toFixed(8));
       }
     } else {
       setToToken("");
@@ -237,8 +245,23 @@ function Widget() {
           "https://min-api.cryptocompare.com/data/price?fsym=SOL&tsyms=USD",
         ),
       ]);
-
+      console.log("presaleAccount.account", presaleAccount.account);
       if (presaleAccount) {
+        const basePrice = 0.0007;
+        const priceIncrement = 0.0003;
+        let totalUSDTValue = 0;
+
+        presaleAccount.account.stages.forEach((stage: any, index: number) => {
+          const stagePrice = Number(basePrice + index * priceIncrement);
+          const stageTokens = Number(
+            formatUnits(stage.soldTokens.toString(), decimals),
+          );
+          const stageValue = stageTokens * stagePrice;
+          totalUSDTValue += stageValue;
+        });
+
+        setTotalUSDTValue(totalUSDTValue);
+
         const obtain = +formatUnits(
           presaleAccount?.account?.stages?.[
             Math.min(
@@ -314,6 +337,7 @@ function Widget() {
           oneSolPrice: USD,
         });
       }
+
       if (publicKey) {
         let userAccounts: any = await presaleProgram?.account.userAccount.all();
         let tokens = 0;
@@ -390,6 +414,193 @@ function Widget() {
     return () => clearTimeout(timeoutId);
   }, [connection, getData, publicKey, presaleProgram]);
 
+  const buyHandler = async () => {
+    try {
+      if (!from || from <= 0 || isNaN(from)) {
+        return showAlert("Enter a valid value to buy.");
+      }
+
+      if (toToken > presaleData.remaining) {
+        let fromAmount: any = "0";
+        if (tokenType == 1) {
+          fromAmount = presaleData.remaining / presaleData.oneUsdPrice;
+          fromAmount = (fromAmount / presaleData.oneSolPrice).toFixed(4);
+        } else {
+          fromAmount = (
+            presaleData.remaining / presaleData.oneUsdPrice
+          ).toFixed(2);
+        }
+        setFrom(fromAmount);
+        return showAlert(
+          `You can only buy ${fromAmount} ${
+            tokenType === 1 ? "SOL" : "USDT"
+          } amount of bebe tokens in this stage.`,
+        );
+      }
+
+      setloading(true);
+      // console.log(presaleData, "presaleData");
+      const userAccount = Keypair.generate();
+      let userAssociateAccount;
+      const [
+        [presalePda],
+        userAssociateUsdtAccount,
+        { decimals: usdtDecimals },
+        { blockhash, lastValidBlockHeight },
+      ] = await Promise.all([
+        PublicKey.findProgramAddressSync(
+          [Buffer.from(anchor.utils.bytes.utf8.encode("presale_authority"))],
+          presaleProgram?.programId as any,
+        ),
+        findAssociatedTokenAccountPublicKey(publicKey, usdtMint),
+        getMint(connection, usdtMint),
+        connection.getLatestBlockhash("finalized"),
+      ]);
+      const [userAccountData] = await Promise.all([
+        connection.getParsedAccountInfo(userAssociateUsdtAccount),
+      ]);
+      if (userAccountData.value) {
+        userAssociateAccount = userAssociateUsdtAccount;
+      } else {
+        const ix = new TransactionInstruction({
+          programId: ASSOCIATED_PROGRAM_ID,
+          data: Buffer.from([]),
+          keys: [
+            { pubkey: publicKey, isSigner: true, isWritable: true },
+            {
+              pubkey: userAssociateUsdtAccount,
+              isSigner: false,
+              isWritable: true,
+            },
+            { pubkey: publicKey, isSigner: false, isWritable: false },
+            {
+              pubkey: usdtMint,
+              isSigner: false,
+              isWritable: false,
+            },
+            {
+              pubkey: SystemProgram.programId,
+              isSigner: false,
+              isWritable: false,
+            },
+            {
+              pubkey: TOKEN_PROGRAM_ID,
+              isSigner: false,
+              isWritable: false,
+            },
+            {
+              pubkey: SYSVAR_RENT_PUBKEY,
+              isSigner: false,
+              isWritable: false,
+            },
+          ],
+        });
+        await sendTransaction(connection, wallet, [ix], []);
+        userAssociateAccount = userAssociateUsdtAccount;
+      }
+
+      const { presaleAccount, owner, ownerUsdtAccount } = presaleData;
+
+      // TODO One user can have multiple accounts, we need to change the logic for multiple accounts
+      if (userData?.userAccount) {
+        const tx: any = await presaleProgram?.methods
+          .existingBuy(
+            tokenType == 1
+              ? new anchor.BN(+parseUnits(from.toString(), 9))
+              : new anchor.BN(+parseUnits(from.toString(), usdtDecimals)),
+            new anchor.BN(+tokenType),
+          )
+          .accounts({
+            userAccount: userData.userAccount,
+            presalePda,
+            chainlinkFeed,
+            chainlinkProgram,
+            presaleAccount,
+            ownerUsdtAccount,
+            userUsdtAccount: userAssociateAccount,
+            owner,
+            user: publicKey,
+            rent: SYSVAR_RENT_PUBKEY,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            systemProgram: SystemProgram.programId,
+          } as any)
+          .signers([])
+          .transaction();
+        tx.recentBlockhash = blockhash;
+        tx.lastValidBlockHeight = lastValidBlockHeight;
+        tx.feePayer = publicKey;
+        const sign = await sendWalletTx(tx, connection, {
+          signers: [],
+        });
+        // console.log(tx, "sign");
+        await connection.confirmTransaction({
+          signature: sign,
+          blockhash,
+          lastValidBlockHeight,
+        });
+      } else {
+        const tx: any = await presaleProgram?.methods
+          .buy(
+            tokenType == 1
+              ? new anchor.BN(+parseUnits(from.toString(), 9))
+              : new anchor.BN(+parseUnits(from.toString(), usdtDecimals)),
+            new anchor.BN(+tokenType),
+          )
+          .accounts({
+            userAccount: userAccount.publicKey,
+            presalePda,
+            chainlinkFeed,
+            chainlinkProgram,
+            presaleAccount,
+            ownerUsdtAccount,
+            userUsdtAccount: userAssociateAccount,
+            owner,
+            user: publicKey,
+            rent: SYSVAR_RENT_PUBKEY,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([userAccount])
+          .transaction();
+        tx.recentBlockhash = blockhash;
+        tx.lastValidBlockHeight = lastValidBlockHeight;
+        tx.feePayer = publicKey;
+        const sign = await sendWalletTx(tx, connection, {
+          signers: [userAccount],
+        });
+        await connection.confirmTransaction({
+          signature: sign,
+          blockhash,
+          lastValidBlockHeight,
+        });
+      }
+      showAlert("Transaction Confirmed", "success");
+
+      getData();
+      setloading(false);
+    } catch (error: any) {
+      let mainMessage;
+      console.log(error, "error==>");
+      const regex = /Error Message: (.+?)\.\.$/;
+      const match = regex.exec(error);
+
+      if (match) {
+        mainMessage = match[1];
+      } else {
+        mainMessage =
+          error?.message ||
+          error?.data?.message ||
+          error?.response?.data?.data?.message ||
+          error?.name;
+      }
+
+      showAlert(mainMessage, "error");
+      setloading(false);
+    }
+  };
+
+  console.log("toToken", toToken);
+
   return (
     <div className="relative flex w-full flex-col items-center justify-center pb-10">
       <div className="relative flex h-fit w-full max-w-[600px] flex-col items-center justify-center gap-10 px-5 md:px-0">
@@ -406,8 +617,7 @@ function Widget() {
           <Stage presaleData={presaleData} />
           <Stats
             totalRaised={presaleData?.totalRaised}
-            usdtRaised={presaleData?.usdtRaised}
-            usdtDecimals={presaleData?.usdtDecimals}
+            totalUSDTValue={totalUSDTValue}
           />
         </div>
       </div>
@@ -421,6 +631,8 @@ function Widget() {
           toToken={toToken}
           fromToken={from}
           setTokenType={setTokenType}
+          buyHandler={buyHandler}
+          claimHandler={claimHandler}
         />
         <Aim />
         <TickerLogos className="mt-[64px] max-w-[1000px]" />
@@ -454,7 +666,7 @@ function LiquidityAtLaunch() {
   );
 }
 
-function Stats({ usdtRaised, totalRaised, usdtDecimals }: any) {
+function Stats({ totalUSDTValue, totalRaised }: any) {
   return (
     <div className="font-heading text-sd-green-300 flex w-full flex-col items-center justify-start gap-6 text-[24px] leading-[24px]">
       <div className="flex w-full items-center justify-between">
@@ -473,8 +685,11 @@ function Stats({ usdtRaised, totalRaised, usdtDecimals }: any) {
         <p>USDT raised</p>
         <p>
           $
-          {usdtRaised &&
-            formatUnits(usdtRaised?.toString(), usdtDecimals?.toString())}
+          {toLocalFormat(
+            !isNaN(parseFloat(totalUSDTValue))
+              ? parseFloat(totalUSDTValue).toFixed(0)
+              : 0,
+          )}
         </p>
       </div>
     </div>
