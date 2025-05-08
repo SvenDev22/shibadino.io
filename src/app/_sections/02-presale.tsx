@@ -12,12 +12,17 @@ import {
 } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID, getMint } from "@solana/spl-token";
 import {
+  chainlinkFeed,
+  chainlinkProgram,
+  mint,
+  usdtMint,
+} from "@/utils/constants";
+import {
   findAssociatedTokenAccountPublicKey,
   sendTransaction,
   usePresaleProgram,
 } from "@/utils/hooks";
 import { formatUnits, parseUnits } from "@ethersproject/units";
-import { mint, usdtMint } from "@/utils/constants";
 import { useCallback, useEffect, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
@@ -559,7 +564,7 @@ function Widget() {
             rent: SYSVAR_RENT_PUBKEY,
             tokenProgram: TOKEN_PROGRAM_ID,
             systemProgram: SystemProgram.programId,
-          })
+          } as any)
           .signers([userAccount])
           .transaction();
         tx.recentBlockhash = blockhash;
