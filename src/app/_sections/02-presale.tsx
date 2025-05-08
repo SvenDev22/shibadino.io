@@ -254,8 +254,8 @@ function Widget() {
         },
       ]: any = await Promise.all([
         presaleProgram?.account.presaleAccount.all(),
-        getMint(connection, mint),
-        axios.get(
+        await getMint(connection, mint),
+        await axios.get(
           "https://min-api.cryptocompare.com/data/price?fsym=SOL&tsyms=USD",
         ),
       ]);
