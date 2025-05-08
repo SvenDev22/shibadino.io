@@ -16,10 +16,10 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { useMemo } from "react";
 
 const endpoint =
-  "https://mainnet.helius-rpc.com/?api-key=c0a4fe90-1fc3-4351-a8e9-1ae5fdcc9163";
+  // "https://mainnet.helius-rpc.com/?api-key=c0a4fe90-1fc3-4351-a8e9-1ae5fdcc9163";
 
-// Backup RPC just in case (500K Credits)
-// "https://mainnet.helius-rpc.com/?api-key=6a7665b6-9f47-45ab-8d13-82b945bb42b7";
+  // Backup RPC just in case (500K Credits)
+  "https://mainnet.helius-rpc.com/?api-key=6a7665b6-9f47-45ab-8d13-82b945bb42b7";
 
 export default function WalletContextProvider({
   children,
