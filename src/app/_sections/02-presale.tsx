@@ -73,7 +73,6 @@ function Widget() {
   } as any);
 
   const showAlert = (message: any, severity = "error") => {
-    console.log("aaa");
     setAlertState({
       open: true,
       message,
@@ -260,7 +259,6 @@ function Widget() {
           "https://min-api.cryptocompare.com/data/price?fsym=SOL&tsyms=USD",
         ),
       ]);
-      console.log("presaleAccount.account", presaleAccount.account);
       if (presaleAccount) {
         const basePrice = 0.0007;
         const priceIncrement = 0.0003;
@@ -424,7 +422,7 @@ function Widget() {
       getData()
         .catch(console.error)
         .finally(() => setloading(false));
-    }, 500);
+    }, 5000); // Tăng lên 5 giây
 
     return () => clearTimeout(timeoutId);
   }, [connection, getData, publicKey, presaleProgram]);
@@ -613,8 +611,6 @@ function Widget() {
       setloading(false);
     }
   };
-
-  console.log("alertState", alertState);
 
   return (
     <div className="relative flex w-full flex-col items-center justify-center pb-10">
