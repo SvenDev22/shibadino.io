@@ -8,10 +8,10 @@ import TopNav from "@/components/top-nav";
 import WalletContextProvider from "@/lib/walletConnectProvider";
 
 export const metadata: Metadata = {
-  title: "Shibadino",
+  title: "ShibaDino - Solana's #1 ICO!",
   description: "Shibadino",
   icons: {
-    icon: "/favicon.ico",
+    icon: "images/favicon.ico",
   },
 };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
       className={`${primaryFont.variable} ${headingFont.variable} scroll-smooth antialiased`}
     >
       <head>
-        <title>ShibaDino - A Solana Based Memecoin </title>
+        <title>ShibaDino - Solana's #1 ICO!</title>
         <link rel="icon" type="image/svg+xml" href="images/logo.png" />
         <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
         <meta

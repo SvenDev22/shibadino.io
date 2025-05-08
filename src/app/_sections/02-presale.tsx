@@ -35,6 +35,7 @@ import ImgShibadinoHero from "@/../public/images/shibadino hero.webp";
 import Stage from "../_components/02-stage";
 import TickerLogos from "../_components/02-ticker-logos";
 import TickerPresale from "../_components/02-ticker-presale";
+import Toast from "@/components/toast";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import { toLocalFormat } from "@/utils/constants";
@@ -72,10 +73,19 @@ function Widget() {
   } as any);
 
   const showAlert = (message: any, severity = "error") => {
+    console.log("aaa");
     setAlertState({
       open: true,
       message,
       severity,
+    });
+  };
+
+  const closeAlert = () => {
+    setAlertState({
+      open: false,
+      message: "",
+      severity: undefined,
     });
   };
 
@@ -604,10 +614,16 @@ function Widget() {
     }
   };
 
-  console.log("toToken", toToken);
+  console.log("alertState", alertState);
 
   return (
     <div className="relative flex w-full flex-col items-center justify-center pb-10">
+      <Toast
+        message={alertState.message}
+        type={alertState.severity}
+        open={alertState.open}
+        onClose={closeAlert}
+      />
       <div className="relative flex h-fit w-full max-w-[600px] flex-col items-center justify-center gap-10 px-5 md:px-0">
         <Image
           className="absolute top-[-172px] left-1/2 z-0 w-[80%] -translate-x-1/2 md:top-[-299px] md:w-[90%]"
@@ -703,7 +719,6 @@ function Stats({ totalUSDTValue, totalRaised }: any) {
 }
 
 function Divider() {
-  console.log("1");
   return <div className="bg-sd-green-200 h-[2px] w-full rounded-[2px]" />;
 }
 
