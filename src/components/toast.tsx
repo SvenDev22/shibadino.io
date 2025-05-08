@@ -10,7 +10,7 @@ const Toast = ({ message, type = "info", onClose, open }: any) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      setTimeout(onClose, 300); // Match animation duration
+      setTimeout(onClose, 3000); // Match animation duration
     }, 3000);
     return () => clearTimeout(timer);
   }, [onClose]);
