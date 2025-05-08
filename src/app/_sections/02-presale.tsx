@@ -697,6 +697,7 @@ function Stats({ totalUSDTValue, totalRaised }: any) {
 }
 
 function Divider() {
+  console.log("1");
   return <div className="bg-sd-green-200 h-[2px] w-full rounded-[2px]" />;
 }
 
