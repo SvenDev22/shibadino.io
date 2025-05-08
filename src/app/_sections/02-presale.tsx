@@ -638,6 +638,7 @@ function Widget() {
           setTokenType={setTokenType}
           buyHandler={buyHandler}
           claimHandler={claimHandler}
+          oneUsdPrice={1 / presaleData?.oneUsdPrice}
         />
         <Aim />
         <TickerLogos className="mt-[64px] max-w-[1000px]" />

@@ -21,6 +21,7 @@ export default function BuyDino({
   setTokenType,
   buyHandler,
   claimHandler,
+  oneUsdPrice,
 }: any) {
   return (
     <div className="bg-sd-green-800 relative flex h-fit w-full max-w-[600px] flex-col items-center justify-center gap-[20px] rounded-[40px] px-5 pt-[32px] pb-[40px] md:px-[32px]">
@@ -36,7 +37,7 @@ export default function BuyDino({
         buyHandler={buyHandler}
         claimHandler={claimHandler}
       />
-      <CurentPrice />
+      <CurentPrice oneUsdPrice={oneUsdPrice} />
     </div>
   );
 }
@@ -199,11 +200,11 @@ function DinoCoin() {
   );
 }
 
-function CurentPrice() {
+function CurentPrice({ oneUsdPrice }: any) {
   return (
     <div className="flex w-full flex-col items-start justify-between gap-3 md:flex-row md:gap-0">
       <p className="text-sd-green-300 text-[16px] leading-[16px] uppercase md:text-[18px] md:leading-[18px]">
-        1 DINO = 0.0039 USDT
+        1 DINO = {oneUsdPrice ?? "0.0039"} USDT
       </p>
       <p className="text-sd-green-300 text-[16px] leading-[16px] uppercase md:text-[18px] md:leading-[18px]">
         LISTING PRICE = 0.005 USDT
