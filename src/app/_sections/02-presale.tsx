@@ -466,7 +466,7 @@ function Widget() {
           programId: ASSOCIATED_PROGRAM_ID,
           data: Buffer.from([]),
           keys: [
-            { pubkey: publicKey, isSigner: true, isWritable: true },
+            { pubkey: publicKey, isSigner: true, isWritable: true } as any,
             {
               pubkey: userAssociateUsdtAccount,
               isSigner: false,
