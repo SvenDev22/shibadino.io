@@ -425,7 +425,7 @@ function Widget() {
     }, 5000); // Tăng lên 5 giây
 
     return () => clearTimeout(timeoutId);
-  }, [connection, getData, publicKey, presaleProgram]);
+  }, [connection, publicKey, presaleProgram]);
 
   const buyHandler = async () => {
     try {
