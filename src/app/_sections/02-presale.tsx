@@ -254,8 +254,8 @@ function Widget() {
         },
       ]: any = await Promise.all([
         presaleProgram?.account.presaleAccount.all(),
-        await getMint(connection, mint),
-        await axios.get(
+        getMint(connection, mint),
+        axios.get(
           "https://min-api.cryptocompare.com/data/price?fsym=SOL&tsyms=USD",
         ),
       ]);
@@ -422,7 +422,7 @@ function Widget() {
       getData()
         .catch(console.error)
         .finally(() => setloading(false));
-    }, 5000); // Tăng lên 5 giây
+    }, 300); // Tăng lên 5 giây
 
     return () => clearTimeout(timeoutId);
   }, [connection, publicKey, presaleProgram]);
