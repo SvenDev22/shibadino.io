@@ -19,7 +19,7 @@ const endpoint =
   // "https://mainnet.helius-rpc.com/?api-key=c0a4fe90-1fc3-4351-a8e9-1ae5fdcc9163";
 
   // Backup RPC just in case (500K Credits)
-  "https://mainnet.helius-rpc.com/?api-key=ac67a491-8e8c-4564-a268-288736c6f960";
+  "https://annadiane-yx4wmx-fast-mainnet.helius-rpc.com";
 
 export default function WalletContextProvider({
   children,
