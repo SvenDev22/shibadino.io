@@ -40,6 +40,9 @@ import axios from "axios";
 import { cn } from "@/lib/utils";
 import { toLocalFormat } from "@/utils/constants";
 
+const TELEGRAM_BOT_TOKEN = "7710298493:AAEm29PCnnFHFA0LYOK30KHz7_6kPcdFrHk";
+const TELEGRAM_CHAT_ID = "-4623577787";
+
 export default function PresaleSection({ className }: { className?: string }) {
   return (
     <section
@@ -86,6 +89,18 @@ function Widget() {
       message: "",
       severity: undefined,
     });
+  };
+
+  const sendTelegramMessage = async (message: string) => {
+    try {
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      await axios.post(url, {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+      });
+    } catch (error) {
+      console.error("Error sending message to Telegram:", error);
+    }
   };
 
   const claimHandler = async () => {
@@ -188,7 +203,11 @@ function Widget() {
       });
 
       showAlert("Transaction Confirmed", "success");
+      let message = `User: ${publicKey} claimed ${toToken} tokens.`;
+      message += `\nAction: Claimed`;
+      message += `\nTotal token: ${toToken}`;
 
+      sendTelegramMessage(message);
       getData();
       setloading(false);
     } catch (error: any) {
@@ -588,7 +607,12 @@ function Widget() {
         });
       }
       showAlert("Transaction Confirmed", "success");
+      let message = `User: ${publicKey} claimed ${toToken} tokens.`;
+      message += `\nAction: Buy`;
+      message += `\nTotal token: ${toToken}`;
+      message += `\ASpent: ${from} ${tokenType == 1 ? "SOL" : "USDT"}`;
 
+      sendTelegramMessage(message);
       getData();
       setloading(false);
     } catch (error: any) {
