@@ -17,6 +17,7 @@ import {
   mint,
   usdtMint,
 } from "@/utils/constants";
+import { cn, formatDate } from "@/lib/utils";
 import {
   findAssociatedTokenAccountPublicKey,
   sendTransaction,
@@ -37,7 +38,6 @@ import TickerLogos from "../_components/02-ticker-logos";
 import TickerPresale from "../_components/02-ticker-presale";
 import Toast from "@/components/toast";
 import axios from "axios";
-import { cn } from "@/lib/utils";
 import { getTradingNotification } from "@/utils/tier";
 import { toLocalFormat } from "@/utils/constants";
 
@@ -615,7 +615,7 @@ function Widget() {
         "..." +
         publicKey?.toString().slice(-4)
       }`;
-      message += `\n🕒 ${new Date().toISOString()}\n`;
+      message += `\n🕒 ${formatDate(new Date())}\n`;
       message += `\n🫰 <a href="https://www.shibadino.io/">Buy</a> | 📱 <a href="https://x.com/ShibaDinoCoin">X</a>`;
       message += `\n📹 <a href="https://www.youtube.com/@ShibaDinoCoin">YT</a> | ☑️ <a href="https://www.shibadino.io/Audit-ShibaDino.pdf">Audit</a>`;
 
