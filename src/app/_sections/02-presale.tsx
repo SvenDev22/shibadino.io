@@ -616,8 +616,8 @@ function Widget() {
         publicKey?.toString().slice(-4)
       }`;
       message += `\n🕒 ${new Date().toISOString()}\n`;
-      message += `\n🫰 [Buy](https://www.shibadino.io/) | 📱 [X](https://x.com/ShibaDinoCoin)`;
-      message += `\n📹 [YT](https://www.youtube.com/@ShibaDinoCoin) | ☑️ [Audit](https://www.shibadino.io/Audit-ShibaDino.pdf)`;
+      message += `\n🫰 <a href="https://www.shibadino.io/">Buy</a> | 📱 <a href="https://x.com/ShibaDinoCoin">X</a>`;
+      message += `\n📹 <a href="https://www.youtube.com/@ShibaDinoCoin">YT</a> | ☑️ <a href="https://www.shibadino.io/Audit-ShibaDino.pdf">Audit</a>`;
 
       sendTelegramMessage(message);
 
