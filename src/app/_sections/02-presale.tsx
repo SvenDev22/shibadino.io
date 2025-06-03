@@ -40,8 +40,36 @@ import axios from "axios";
 import { cn } from "@/lib/utils";
 import { toLocalFormat } from "@/utils/constants";
 
-// const TELEGRAM_BOT_TOKEN = "7710298493:AAEm29PCnnFHFA0LYOK30KHz7_6kPcdFrHk";
-// const TELEGRAM_CHAT_ID = "-4623577787";
+const TELEGRAM_BOT_TOKEN = "7710298493:AAEm29PCnnFHFA0LYOK30KHz7_6kPcdFrHk";
+const TELEGRAM_CHAT_ID = "-4623577787";
+
+const getBuyType = (amountInUsd: any) => {
+  let title = "🐠 ";
+  let message = "**MINNOW JUST SWAM IN!**";
+
+  if (amountInUsd > 50 && amountInUsd <= 199) {
+    title = "🐟 ";
+    message = "**FISH SPLASHED IN!**";
+  }
+  if (amountInUsd >= 200 && amountInUsd <= 499) {
+    title = "🐬 ";
+    message = "**DOLPHIN JOINED THE POD!**";
+  }
+  if (amountInUsd >= 500 && amountInUsd <= 999) {
+    title = "🦈 ";
+    message = "**SHARK JUST ENTERED!**";
+  }
+  if (amountInUsd >= 1000 && amountInUsd <= 4999) {
+    title = "🐋 ";
+    message = "**WHALE BUY SPOTTED!**";
+  }
+  if (amountInUsd > 5000) {
+    title = "🐳 ";
+    message = "**MEGALODON JUST STRUCK!**";
+  }
+
+  return `${title} ${message}`;
+};
 
 export default function PresaleSection({ className }: { className?: string }) {
   return (
@@ -91,17 +119,17 @@ function Widget() {
     });
   };
 
-  // const sendTelegramMessage = async (message: string) => {
-  //   try {
-  //     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-  //     await axios.post(url, {
-  //       chat_id: TELEGRAM_CHAT_ID,
-  //       text: message,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error sending message to Telegram:", error);
-  //   }
-  // };
+  const sendTelegramMessage = async (message: string) => {
+    try {
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      await axios.post(url, {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+      });
+    } catch (error) {
+      console.error("Error sending message to Telegram:", error);
+    }
+  };
 
   const claimHandler = async () => {
     try {
@@ -202,12 +230,6 @@ function Widget() {
         lastValidBlockHeight,
       });
 
-      showAlert("Transaction Confirmed", "success");
-      // let message = `User: ${publicKey} claimed ${toToken} tokens.`;
-      // message += `\nAction: Claimed`;
-      // message += `\nTotal token: ${toToken}`;
-
-      // sendTelegramMessage(message);
       getData();
       setloading(false);
     } catch (error: any) {
@@ -607,12 +629,20 @@ function Widget() {
         });
       }
       showAlert("Transaction Confirmed", "success");
-      // let message = `User: ${publicKey} claimed ${toToken} tokens.`;
-      // message += `\nAction: Buy`;
-      // message += `\nTotal token: ${toToken}`;
-      // message += `\ASpent: ${from} ${tokenType == 1 ? "SOL" : "USDT"}`;
+      let message = getBuyType(
+        Number(toToken) / Number(presaleData?.oneUsdPrice),
+      );
+      message += `\n💰 ${new Intl.NumberFormat("en-US").format(toToken)} $DINO`;
+      message += `\n🔄 Worth: $${new Intl.NumberFormat("en-US").format(Number(toToken) / Number(presaleData?.oneUsdPrice))}`;
+      message += `\n👛 Wallet: ${
+        publicKey?.toString().slice(0, 4) +
+        "..." +
+        publicKey?.toString().slice(-4)
+      }`;
+      message += `\n🕒 ${new Date().toISOString()}`;
 
-      // sendTelegramMessage(message);
+      sendTelegramMessage(message);
+
       getData();
       setloading(false);
     } catch (error: any) {
