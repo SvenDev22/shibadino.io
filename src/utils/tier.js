@@ -5,7 +5,7 @@ const TRADING_TIERS = [
     max: Infinity,
     icon: "🐳",
     label: "Megalodon",
-    message: "<br>MEGALODON JUST STRUCK!</br>",
+    message: "<b>MEGALODON JUST STRUCK!</b>",
     value: 500,
   },
   {
@@ -13,7 +13,7 @@ const TRADING_TIERS = [
     max: 4999,
     icon: "🐋",
     label: "Whale",
-    message: "<br>WHALE BUY SPOTTED!</br>",
+    message: "<b>WHALE BUY SPOTTED!</b>",
     value: 100,
   },
   {
@@ -21,7 +21,7 @@ const TRADING_TIERS = [
     max: 999,
     icon: "🦈",
     label: "Shark",
-    message: "<br>SHARK JUST ENTERED!</br>",
+    message: "<b>SHARK JUST ENTERED!</b>",
     value: 50,
   },
   {
@@ -29,7 +29,7 @@ const TRADING_TIERS = [
     max: 499,
     icon: "🐬",
     label: "Dolphin",
-    message: "<br>DOLPHIN JOINED THE POD!</br>",
+    message: "<b>DOLPHIN JOINED THE POD!</b>",
     value: 20,
   },
   {
@@ -37,7 +37,7 @@ const TRADING_TIERS = [
     max: 199,
     icon: "🐟",
     label: "Fish",
-    message: "<br>FISH SPLASHED IN!</br>",
+    message: "<b>FISH SPLASHED IN!</b>",
     value: 5,
   },
   {
@@ -45,7 +45,7 @@ const TRADING_TIERS = [
     max: 49,
     icon: "🐠",
     label: "Minnow",
-    message: "<br>MINNOW JUST SWAM IN!</br>",
+    message: "<b>MINNOW JUST SWAM IN!</b>",
     value: 1,
   },
 ];
