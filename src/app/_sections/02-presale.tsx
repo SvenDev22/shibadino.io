@@ -38,38 +38,11 @@ import TickerPresale from "../_components/02-ticker-presale";
 import Toast from "@/components/toast";
 import axios from "axios";
 import { cn } from "@/lib/utils";
+import { getTradingNotification } from "@/utils/tier";
 import { toLocalFormat } from "@/utils/constants";
 
 const TELEGRAM_BOT_TOKEN = "7710298493:AAEm29PCnnFHFA0LYOK30KHz7_6kPcdFrHk";
 const TELEGRAM_CHAT_ID = "-4623577787";
-
-const getBuyType = (amountInUsd: any) => {
-  let title = "🐠🐠🐠🐠🐠";
-  let message = "**MINNOW JUST SWAM IN!**";
-
-  if (amountInUsd > 5 && amountInUsd <= 20) {
-    title = "🐟🐟🐟🐟🐟";
-    message = "**FISH SPLASHED IN!**";
-  }
-  if (amountInUsd >= 21 && amountInUsd <= 50) {
-    title = "🐬🐬🐬🐬🐬";
-    message = "**DOLPHIN JOINED THE POD!**";
-  }
-  if (amountInUsd >= 51 && amountInUsd <= 100) {
-    title = "🦈🦈🦈🦈🦈";
-    message = "**SHARK JUST ENTERED!**";
-  }
-  if (amountInUsd >= 101 && amountInUsd <= 500) {
-    title = "🐋🐋🐋🐋🐋";
-    message = "**WHALE BUY SPOTTED!**";
-  }
-  if (amountInUsd > 501) {
-    title = "🐳🐳🐳🐳🐳";
-    message = "**MEGALODON JUST STRUCK!**";
-  }
-
-  return `${message}\n\n${title}\n`;
-};
 
 export default function PresaleSection({ className }: { className?: string }) {
   return (
@@ -125,7 +98,8 @@ function Widget() {
       await axios.post(url, {
         chat_id: TELEGRAM_CHAT_ID,
         text: message,
-        parse_mode: "Markdown",
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
       });
     } catch (error) {
       console.error("Error sending message to Telegram:", error);
@@ -630,9 +604,10 @@ function Widget() {
         });
       }
       showAlert("Transaction Confirmed", "success");
-      let message = getBuyType(
+      const tier: any = getTradingNotification(
         Number(toToken) / Number(presaleData?.oneUsdPrice),
       );
+      let message = `${tier.message} \n\n${tier.iconRepresentation}`;
       message += `\n💰 ${new Intl.NumberFormat("en-US").format(toToken)} $DINO`;
       message += `\n🔄 Worth: $${new Intl.NumberFormat("en-US").format(Number(toToken) / Number(presaleData?.oneUsdPrice))}`;
       message += `\n👛 Wallet: ${
