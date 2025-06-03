@@ -44,31 +44,31 @@ const TELEGRAM_BOT_TOKEN = "7710298493:AAEm29PCnnFHFA0LYOK30KHz7_6kPcdFrHk";
 const TELEGRAM_CHAT_ID = "-4623577787";
 
 const getBuyType = (amountInUsd: any) => {
-  let title = "🐠 ";
+  let title = "🐠🐠🐠🐠🐠";
   let message = "**MINNOW JUST SWAM IN!**";
 
-  if (amountInUsd > 50 && amountInUsd <= 199) {
-    title = "🐟 ";
+  if (amountInUsd > 5 && amountInUsd <= 20) {
+    title = "🐟🐟🐟🐟🐟";
     message = "**FISH SPLASHED IN!**";
   }
-  if (amountInUsd >= 200 && amountInUsd <= 499) {
-    title = "🐬 ";
+  if (amountInUsd >= 21 && amountInUsd <= 50) {
+    title = "🐬🐬🐬🐬🐬";
     message = "**DOLPHIN JOINED THE POD!**";
   }
-  if (amountInUsd >= 500 && amountInUsd <= 999) {
-    title = "🦈 ";
+  if (amountInUsd >= 51 && amountInUsd <= 100) {
+    title = "🦈🦈🦈🦈🦈";
     message = "**SHARK JUST ENTERED!**";
   }
-  if (amountInUsd >= 1000 && amountInUsd <= 4999) {
-    title = "🐋 ";
+  if (amountInUsd >= 101 && amountInUsd <= 500) {
+    title = "🐋🐋🐋🐋🐋";
     message = "**WHALE BUY SPOTTED!**";
   }
-  if (amountInUsd > 5000) {
-    title = "🐳 ";
+  if (amountInUsd > 501) {
+    title = "🐳🐳🐳🐳🐳";
     message = "**MEGALODON JUST STRUCK!**";
   }
 
-  return `${title} ${message}`;
+  return `${message}\n\n${title}\n`;
 };
 
 export default function PresaleSection({ className }: { className?: string }) {
@@ -125,6 +125,7 @@ function Widget() {
       await axios.post(url, {
         chat_id: TELEGRAM_CHAT_ID,
         text: message,
+        parse_mode: "Markdown",
       });
     } catch (error) {
       console.error("Error sending message to Telegram:", error);
@@ -639,7 +640,9 @@ function Widget() {
         "..." +
         publicKey?.toString().slice(-4)
       }`;
-      message += `\n🕒 ${new Date().toISOString()}`;
+      message += `\n🕒 ${new Date().toISOString()}\n`;
+      message += `\n🫰 [Buy](https://www.shibadino.io/) | 📱 [X](https://x.com/ShibaDinoCoin)`;
+      message += `\n📹 [YT](https://www.youtube.com/@ShibaDinoCoin) | ☑️ [Audit](https://www.shibadino.io/Audit-ShibaDino.pdf)`;
 
       sendTelegramMessage(message);
 
