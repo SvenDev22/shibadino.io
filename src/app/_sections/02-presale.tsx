@@ -608,7 +608,8 @@ function Widget() {
         Number(toToken) / Number(presaleData?.oneUsdPrice),
       );
       let message = `${tier.message} \n\n${tier.iconRepresentation}`;
-      message += `\n💰 ${new Intl.NumberFormat("en-US").format(toToken)} $DINO`;
+      message += `\n🦖 ${new Intl.NumberFormat("en-US").format(toToken)} DINO`;
+      message += `\n💰 Paid:  ${tokenType == 1 ? new Intl.NumberFormat("en-US").format(Number(toToken) / Number(presaleData?.oneSolPrice)) : new Intl.NumberFormat("en-US").format(Number(toToken) / Number(presaleData?.oneUsdPrice))} ${tokenType == 1 ? "SOL" : "USDT"}`;
       message += `\n🔄 Worth: $${new Intl.NumberFormat("en-US").format(Number(toToken) / Number(presaleData?.oneUsdPrice))}`;
       message += `\n👛 Wallet: ${
         publicKey?.toString().slice(0, 4) +
