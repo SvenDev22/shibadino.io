@@ -607,7 +607,7 @@ function Widget() {
       const tier: any = getTradingNotification(
         Number(toToken) / Number(presaleData?.oneUsdPrice),
       );
-      let message = `${tier.message} \n\n${tier.iconRepresentation}\n\n`;
+      let message = `${tier.message} \n\n${tier.iconRepresentation}\n`;
       message += `\n🦖 ${new Intl.NumberFormat("en-US").format(toToken)} DINO`;
       message += `\n💰 Paid: ${from} ${tokenType == 1 ? "SOL" : "USDT"}`;
       message += `\n🔄 Worth: $${new Intl.NumberFormat("en-US").format(Number(toToken) / Number(presaleData?.oneUsdPrice))}`;
