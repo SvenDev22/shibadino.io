@@ -42,7 +42,7 @@ import { getTradingNotification } from "@/utils/tier";
 import { toLocalFormat } from "@/utils/constants";
 
 const TELEGRAM_BOT_TOKEN = "7710298493:AAEm29PCnnFHFA0LYOK30KHz7_6kPcdFrHk";
-const TELEGRAM_CHAT_ID = "-4623577787";
+const TELEGRAM_CHAT_ID = "-1002227214633";
 
 export default function PresaleSection({ className }: { className?: string }) {
   return (
