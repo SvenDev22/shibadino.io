@@ -666,7 +666,7 @@ function Widget() {
         />
         <div className="bg-sd-green-800 z-10 flex w-full flex-col items-center justify-center gap-10 rounded-[40px] px-5 pt-[32px] pb-[40px] md:px-[32px]">
           <TickerPresale />
-          <Countdown time={1749189600} />
+          <Countdown time={1750010400} />
           <LiquidityAtLaunch />
           <Stage presaleData={presaleData} />
           <Stats
