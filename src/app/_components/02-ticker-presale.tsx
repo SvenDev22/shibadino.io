@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import SimpleMarquee from "@/components/marquee";
 
-export default function TickerPresale() {
+export default function TickerPresale({ currenStage }: any) {
   return (
     <div className="relative h-fit w-full overflow-hidden">
       <SimpleMarquee direction="left" baseVelocity={8}>
