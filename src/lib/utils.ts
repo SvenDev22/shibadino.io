@@ -9,3 +9,8 @@ export const formatDate = (date = new Date()) => {
   const d = date;
   return `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, "0")}/${String(d.getUTCDate()).padStart(2, "0")} - ${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}:${String(d.getUTCSeconds()).padStart(2, "0")} +UTC`;
 };
+
+export const formatNumber = (num: string | number) => {
+  const str = Number(num).toString();
+  return str.startsWith("0.") ? str.substring(1) : str;
+};

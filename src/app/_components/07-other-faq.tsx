@@ -252,7 +252,7 @@ const FAQS: FAQs[] = [
     id: "how-get",
     title: "how do i get shibadino?",
     content:
-      "You can only buy $DINO on the official ShibaDino website. After the presale you will be able to claim and trade your purchased tokens. Important: You can currently only buy $DINO on shibadino.xyz. All other providers are scam. Never send money directly to the contract address, always buy via the presale panel on the website.",
+      "You can only buy $DINO on the official ShibaDino website. After the presale you will be able to claim and trade your purchased tokens. Important: You can currently only buy $DINO on shibadino.io. All other providers are scam. Never send money directly to the contract address, always buy via the presale panel on the website.",
   },
   {
     id: "contact",
