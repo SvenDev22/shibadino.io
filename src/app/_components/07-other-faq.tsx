@@ -258,6 +258,6 @@ const FAQS: FAQs[] = [
     id: "contact",
     title: "who do I contact?",
     content:
-      "You can ask questions at any time in our ShibaDino Community group and we recommend that you join so that you are always up to date. If you have any direct questions, please send us an email: contact@shibadino.xyz.",
+      "You can ask questions at any time in our ShibaDino Community group and we recommend that you join so that you are always up to date. If you have any direct questions, please send us an email: contact@shibadino.io.",
   },
 ];
