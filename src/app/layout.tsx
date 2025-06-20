@@ -31,6 +31,10 @@ export default function RootLayout({
         <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
         <meta
           name="google-site-verification"
+          content="PkBCAztGPEeqXICytcqATpqf4729RV3bHq_JOhmX0aM"
+        />
+        <meta
+          name="google-site-verification"
           content="R-UCCl3tfS91gqXQOUGvbmZ6qlpC8IJTzgolYKUetyo"
         />
       </head>
