@@ -40,6 +40,7 @@ import Toast from "@/components/toast";
 import axios from "axios";
 import { getTradingNotification } from "@/utils/tier";
 import { toLocalFormat } from "@/utils/constants";
+import useTelegram from "@/hooks/useTelegram";
 
 const TELEGRAM_BOT_TOKEN = "7710298493:AAEm29PCnnFHFA0LYOK30KHz7_6kPcdFrHk";
 const TELEGRAM_CHAT_ID = "-1002227214633";
@@ -70,6 +71,7 @@ function Widget() {
   const wallet = useWallet();
   const [tokenType, setTokenType] = useState(2);
   const [totalUSDTValue, setTotalUSDTValue] = useState(0);
+  const { sendMessage } = useTelegram();
   const [alertState, setAlertState] = useState({
     open: false,
     message: "",
@@ -94,13 +96,7 @@ function Widget() {
 
   const sendTelegramMessage = async (message: string) => {
     try {
-      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-      await axios.post(url, {
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: "HTML",
-        disable_web_page_preview: true,
-      });
+      await sendMessage(message);
     } catch (error) {
       console.error("Error sending message to Telegram:", error);
     }
