@@ -4,7 +4,7 @@ import axios from "axios";
 
 // Configure axios
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "https://api.shibadino.io/",
+  baseURL: process.env.REACT_APP_API_URL || "https://api.shibadino.io/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
