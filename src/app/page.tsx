@@ -298,7 +298,7 @@ export default function Home() {
                 authenticity that made us who we are. Please find us at 
               </p>
            <span className="text-lg md:text-xl lg:text-2xl text-white leading-relaxed max-w-3xl mx-auto drop-shadow-lg">
-                    www.ShibaDino.xyz
+                    www.shibadino.xyz
             </span> 
       
 
